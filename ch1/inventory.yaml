@@ -12,3 +12,10 @@ If you want to access the server via ssh on another port besides 22 you will nee
 specify it here.
 
 Ex: www.example.com:2222
+
+ansible does not check the ssh config for ports, only the inventory
+
+
+Note you have to run a command after sourcing .bashrc b/c each ssh session is distinct - every ansible command runs in a separate ssh transaction.
+
+
