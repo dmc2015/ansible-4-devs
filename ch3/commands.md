@@ -141,21 +141,42 @@ ansible multi -m file -a "src=/src/symlink dest=/dest/symlink owner=root group=r
 #creates a symlinked file
 
 ansible multi -m -s file -a "dest=/tmp/test state=absent"
-#creates a 
+#deletes a folder or file
 
 
 ################
 #Run Operations in the Background
 
+ansible -s -B 3600 -a "yum -y update"
+#does a yum update and requires that the update be complted in 3600 seconds
 
+ansible multi -s -m async_status -a "jid=306434204687.20048"
+#allows you to check the status of a background job that is runnning
+
+ansible multi -B 3600 -P 0 -a "/path/to/fire-and-forget-script.sh"
+#fire and forget tasks, tasks that run in the background and do not get checked for updates, -B is set high and -P is set to '0'
+#this prevents ansible async_status from running, but you can check a file for the status update (!/.ansible_async/<jid>)
+
+
+###########
+Common Log File Operations of UNIX in Ansible
+tail
+cat
+grep
+
+Exceptions to these working properly
+#-operations that continuously monitor a file, 'tail -f', won't work with ansible. ansible only displays output after the operation is complete, ctrl+c wont' work.(later this feature will be added)
+#not a good idea to run a command that has a large amount of data with stdout in Ansible,
+#if you redirect a filter output from a command you will need to use the shell module instead of the command module.
 
 PARAMETERS
 -a shell command
 -m module, followed by the name of the module
 -s specifies that the command should be a sudo command, same as --sudo
 -K allows ansible to respond with a password when needed, same as --ask-sudo-pass
--B sets the max amount of time to let a job run
--P sets amount of time to wait for polling servers, checking on the status of a job
+-B sets the max amount of time to let a job run, this parameter causes the command to be run in the background
+-P sets amount of time to wait for polling servers, checking on the status of a job, this parameter causes the command to be run in the background
+
 
 #NOTES
 
