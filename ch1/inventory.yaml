@@ -3,4 +3,4 @@
 
 
 [example]
-ansible       ansible_ssh_host=162.243.32.138     ansible_ssh_user=root
+ansible       ansible_ssh_host=162.243.110.91         ansible_ssh_user=root
