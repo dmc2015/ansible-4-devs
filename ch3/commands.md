@@ -164,10 +164,60 @@ tail
 cat
 grep
 
+
+ansible multi -s -a "tail /var/log/messages"
+# performs a tail on the messages file
+
+ansible multi -s -m shell -a "tail /var/log/messages | \ grep ansible-command | wc -l"
+# filters the messsages with in the files with grep
+
 Exceptions to these working properly
 #-operations that continuously monitor a file, 'tail -f', won't work with ansible. ansible only displays output after the operation is complete, ctrl+c wont' work.(later this feature will be added)
 #not a good idea to run a command that has a large amount of data with stdout in Ansible,
 #if you redirect a filter output from a command you will need to use the shell module instead of the command module.
+
+
+
+#
+Cron Jobs
+
+ansible multi -s -m cron -a "name='dialy-cron-all-servers' hour=4 job='/path/to/daily-script.sh'"
+#sets a cron job to run a script on all servers everyday at 4am
+
+ansible multi -s -m cron -a "name='daily-cron-all-servers state=absent"
+#removes a cron job
+
+
+cron_file=cron_file_name
+#allows ansible to manage custom crontabs
+
+#SPECIAL CRON PARAMETERS
+special_time=reboot || yearly || monthly
+backup=yes - creates a back up of the crontab
+user=[user] 
+
+
+#
+Utilizing the Git Module with Ansible
+
+ansible app -s -m git -a "repo=git://example.com/path/to/repo.git dest=/opt/myapp update=yes version=1.2.4 accept_hostke=yes"
+#use ansilbe git module to clone a git repo to a definition and update it to a specific git tag, branch or commit number, update forces the checkedout copy to be updated, I believe this is on the guest machine. accept_hostkey=yes allows you to connect to the repo even though you do not have the ssh key to the repo, git needs to be installed before this works.
+
+#
+Accelerated Mode with Ansible
+#allows you to increase the speed at which ansible runs by usine SSH for the initial connection and AES after connection is made to continue to send commands and provide standard output. Accelerate mode requires the python-keyczar package to work.
+
+---
+  -hosts: all
+   accelerate: true
+   acclerate_port: 2342
+   []
+#sets up acceleration in a playbook, you need to make sure that the port is open.
+
+pipelining=True
+#allows ansible to send and execute most ansilbe modules over ssh, instead of the default process of moving a file to the VM, executing and then removing the file.
+#This is only available for ansible 1.5+
+
 
 PARAMETERS
 -a shell command
