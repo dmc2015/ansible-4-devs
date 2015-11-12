@@ -11,11 +11,35 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.ssh.insert_key = false
-  #if true vagrant will automatically insert a keypair to use for SSH, replacing the defualt vagrant insecure key insde the machine if detecthed
+  #if true vagrant will automatically insert a keypair to use for SSH, replacing the defualt vagrant insecure key inside the machine if detected
+  
   config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--memory", "256"]
   end
-  #sets the provider for the virtualbox
+  #sets the provider to virtualbox
+  #
+
+  config.vm.define "app1" do |app|
+      app.vm.hostname = "orc-app1.dev"
+      app.vm.box = "geerlingguy/centos7"
+      app.vm.network :private_network, ip: "192.168.60.4"
+  end
+  #creates/defines a box. sets the box name, the os of the box, the network type and ip of the box
+  #
+  #
+ 
+
+  config.vm.define "app2" do |app|
+      app.vm.hostname = "orc-app2.dev"
+      app.vm.box = "geerlingguy/centos7"
+      app.vm.network :private_network, ip: "192.168.60.5"
+  end
+
+  config.vm.define "db" do |db|
+      db.vm.hostname = "orc-db.dev"
+      db.vm.box = "geerlingguy/centos7"
+      db.vm.network :private_network, ip: "192.168.60.6"
+  end
 
   # The most common configuration options are documented and commented below.
   # For a complete reference, please see the online documentation at
