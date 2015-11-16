@@ -1,0 +1,9 @@
+{
+  "name":"nodeapp",
+  "description":"Example Express & Node app for ansible",
+  "author": "Jeff Geerling",
+  "dependencies": {
+    "express": "3.x.x"
+   },
+  "engine":"node >= 0.10.6"
+}

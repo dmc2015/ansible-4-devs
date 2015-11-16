@@ -1,21 +1,22 @@
 ---
-  -hosts: all
+  - name: install dependencies
+    hosts: all
 
 
-   tasks:
-   - name: Install Apache
-     command: yum install --quiet -y httpd httpd-devel
+    tasks:
+     - name: Install Apache
+       command: yum install --quiet -y httpd httpd-devel
 
-#       - name: Copy configuration files
-#         command: > 
-#             cp httpd.conf /etc/httpd/conf/httpd.conf
-#       - command: >
-#             cp httpd-vhosts.conf /etc/httpd/conf/httpd-vhosts.conf
+     - name: Copy configuration files
+       command: > 
+                 cp httpd.conf /etc/httpd/conf/httpd.conf
+       command: >
+                 cp httpd-vhosts.conf /etc/httpd/conf/httpd-vhosts.conf
 
 
-#       - name: Start Appache and configure to run on boot
-#         command: service httpd start
-#       - command: chkconfig httpd on
+     - name: Start Appache and configure to run on boot
+       command: service httpd start
+       command: chkconfig httpd on
 
 
 

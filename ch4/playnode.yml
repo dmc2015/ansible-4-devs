@@ -1,0 +1,48 @@
+---
+  - name: install node
+    hosts: all
+    sudo: yes
+    tasks:
+    var:
+        node_apps_location:/node
+       - name: Import Remi GPG key
+         rpm_key: "key={{ item }} state=present"
+         with_items:
+            - "http://rpms.famillecollet.com/RPM-GPG-KEY-remi"
+       - name: Install Remi repo
+         command: "rpm -Uvh --force {{ item.href }} 
+         creates={{ item.creates }}"
+         with_items:
+             - href: "http://rpms.famillecollet.com/enterprise/remi-release-6.rpm"
+               creates: "/etc/yum.repos.d/remi.repo"
+       - name: Install EPEL repo
+         yum: name=epel-release state=present
+
+       - name: Ensure firewalld is stopped (since this is for testing)
+         service: name=firewalld state=stopped
+
+       - name: Install Node.js and npm
+         yum: name=npm state=present enablerepo=epel
+
+       - name: Install Forever (runs node)
+         npm: name=forever global=yes state=latest
+        
+       - name: Ensure Nodejs app exists
+         file: "path={{ node_apps_location }} state=directory"
+             #ensures that the path exists
+
+       - name: Copy example Nodejs app to server
+         copy: "src=app dest={{ node_apps_location }}"
+             #
+
+       - name: Install npm dependencies
+         npm: path={{ node_apps_location }}/app
+
+       - name: Check list of running Node.js apps
+         command: forever list
+         register: forever_list
+         changed_when: false 
+
+       - name: Start example Node.js app
+         command: "forever start {{ node_apps_location }}/app/app.js"
+         when: "forever_list.stout.find('{{ node_apps_location }}'/app/app.js) == -1" 
