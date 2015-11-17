@@ -2,9 +2,9 @@
   - name: install node
     hosts: all
     sudo: yes
+    #vars:
+    #   node_apps_location: /node
     tasks:
-    var:
-        node_apps_location:/node
        - name: Import Remi GPG key
          rpm_key: "key={{ item }} state=present"
          with_items:
@@ -32,8 +32,7 @@
              #ensures that the path exists
 
        - name: Copy example Nodejs app to server
-         copy: "src=app dest={{ node_apps_location }}"
-             #
+         copy: "src=. dest={{ node_apps_location }}"
 
        - name: Install npm dependencies
          npm: path={{ node_apps_location }}/app
@@ -44,5 +43,5 @@
          changed_when: false 
 
        - name: Start example Node.js app
-         command: "forever start {{ node_apps_location }}/app/app.js"
-         when: "forever_list.stout.find('{{ node_apps_location }}'/app/app.js) == -1" 
+         command: "forever start {{ node_apps_location }}/app/node.js"
+         when: "forever_list.stout.find('{{ node_apps_location }}'/app/node.js) == -1" 

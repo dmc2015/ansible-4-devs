@@ -1,9 +1,15 @@
 {
-  "name":"nodeapp",
-  "description":"Example Express & Node app for ansible",
-  "author": "Jeff Geerling",
+  "name": "nodeapp",
+  "version": "1.0.0",
+  "description": "Example Express & Node With Ansible",
+  "main": "node.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "don mclamb",
+  "license": "ISC",
   "dependencies": {
-    "express": "3.x.x"
-   },
-  "engine":"node >= 0.10.6"
+    "express": "*"
+  }
 }
+
